@@ -13,7 +13,7 @@
 
     function uniqueness_check($name, $email, $number, $connection)
     {
-        $result = db_request('name', $name, '', $connection);
+        $result = db_request('name', $name, '1', $connection);
 
         if ($result -> num_rows > 0) {
             $_SESSION['user']['message'] = 'Пользователь с таким именем уже существует, попробуйте изменить имя.';
@@ -43,8 +43,14 @@
         mysqli_query($connection, "INSERT INTO users (name, email, number, pass) VALUES ('$name', '$email', '$number', '$pas')");
         $sql = "SELECT id FROM users WHERE email = '$email' AND pass = '$password'";
         $pass_check = $connection -> query($sql);
-        $_SESSION['user']['id'] = $pass_check;
-        $_SESSION['user']['message'] = "Вы зарегистрированы как $name. Используйте почту или номер телефона для входа.";
+        $_SESSION['user'] = [
+            'id' => $pass_check,
+            'name' => $name,
+            'number' => $number,
+            'email' => $email,
+            'pas' => $pas,
+            'message' => "Вы зарегистрированы как $name. Используйте почту или номер телефона для входа.",
+        ];
         header('Location: user_page.php');
     } else {
         $_SESSION['user']['message'] = 'Пароли не совпадают, проверьте введенные данные.';

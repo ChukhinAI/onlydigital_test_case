@@ -46,16 +46,7 @@
     $user_info = [];
     if (pass_check($login, $password, $connection, $user_info)) {
         header('Location: user_page.php');
-        print_r('sucess');
     } else {
         $_SESSION['user']['message'] = 'Пара пароль-логин не найдена, проверьте введенные данные.';
         header('Location: index.php');
-        print_r('<br>fail');
     }
-
-    print_r("<br>");
-    print_r("user_info after = $user_info");
-    print_r('<br>');
-    echo '<pre>';
-    print_r($_SESSION);
-    echo '</pre>';

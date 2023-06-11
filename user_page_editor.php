@@ -2,9 +2,7 @@
     session_start();
 
     require 'connection.php';
-    //require_once 'registration.php';
     use function connect\db_request;
-    //use function registration\uniqueness_check;
 
     global $connection;
 
@@ -14,8 +12,6 @@ print_r($_SESSION);
 print_r($_SESSION['user']['id']);
 echo '</pre>';
 
-
-///*
     if (!empty($_SESSION['user']['id'])) { // проверка на то, что юзер вошел в учетку, работает без id
         $id = $_SESSION['user']['id'];
     } else {
@@ -40,7 +36,7 @@ echo '</pre>';
     if (empty($_POST["number"])) {
         $number = $_SESSION['user']['number'];
     } else {
-        $name = $_POST['number'];
+        $number = $_POST['number'];
     }
 
     function uniqueness_check($name, $email, $number, $connection)
@@ -66,11 +62,13 @@ echo '</pre>';
         }
     }
 
+    $password = md5($password);
+    $new_password = md5($new_password);
     if ($connection->query("SELECT id FROM users WHERE email='$email' AND pass = '$password'")->num_rows > 0) {
         // проверка на уникальность логина, почты, телефона
         uniqueness_check($name, $email, $number, $connection);
         $pas = md5($new_password);
-        mysqli_query($connection, "UPDATE users SET name='$name', email='$email', number='$number', pass='$pas' WHERE id='$id'");
+        mysqli_query($connection, "UPDATE users SET name='$name', email='$email', number='$number', pass='$new_password' WHERE id='$id'");
 
         $_SESSION['user'] = [
             'id' => $id,
@@ -80,8 +78,7 @@ echo '</pre>';
             'pas' => $pas,
             'message' => "Вы зарегистрированы как $name. Используйте почту или номер телефона для входа.",
         ];
-
     } else {
-        $_SESSION['user']['message'] = 'Пароли не совпадают, проверьте введенные данные.';
+        $_SESSION['user']['message'] = 'Пароль не верен, проверьте введенные данные.';
     }
     header('Location: user_page.php');
