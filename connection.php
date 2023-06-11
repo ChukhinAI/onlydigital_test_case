@@ -2,17 +2,24 @@
     namespace connect;
     //global $connection;
     $connection = mysqli_connect('localhost', 'root', '', 'onlydigital_case_db');
+    //$connection = new mysqli('localhost', 'root', '', 'onlydigital_case_db');
 
     //print_r($connection);
-    $test = 'test';
+    //$test = 'test';
 
+    ///*
     if (!$connection) {
         die("connection failed: " . $connection->connect_error);
     }
+    //*/
 
     function db_request($column, $param, $cond, $connection) {
+        $column = mysqli_real_escape_string($connection, $column);
+        $param = mysqli_real_escape_string($connection, $param);
+        $cond = mysqli_real_escape_string($connection, $cond);
+
         $sql = "SELECT '$column' FROM users WHERE $column = '$param' AND $cond";
-        $res = $connection->query($sql);
+        //$res = $connection->query($sql);
 
         //print_r("<br> connection = $column, $param");
         //print_r($res);

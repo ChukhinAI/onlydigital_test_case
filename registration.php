@@ -18,19 +18,19 @@
         $result = db_request('name', $name, '', $connection);
 
         if ($result -> num_rows > 0) {
-            $_SESSION['message'] = 'Пользователь с таким именем уже существует, попробуйте изменить имя.';
+            $_SESSION['user']['message'] = 'Пользователь с таким именем уже существует, попробуйте изменить имя.';
             header('Location: registration_form.php');
         } else {
             $sql = "SELECT email FROM users WHERE email='$email'";
             $result = $connection->query($sql);
             if ($result->num_rows > 0) {
-                $_SESSION['message'] = 'Пользователь с таким почтовым адресом уже существует, попробуйте изменить его.';
+                $_SESSION['user']['message'] = 'Пользователь с таким почтовым адресом уже существует, попробуйте изменить его.';
                 header('Location: registration_form.php');
             } else {
                 $sql = "SELECT email FROM users WHERE number='$number'";
                 $result = $connection->query($sql);
                 if ($result->num_rows > 0) {
-                    $_SESSION['message'] = 'Пользователь с таким номером телефона уже существует, попробуйте изменить его.';
+                    $_SESSION['user']['message'] = 'Пользователь с таким номером телефона уже существует, попробуйте изменить его.';
                     header('Location: registration_form.php');
                 }
             }
@@ -49,11 +49,11 @@
         $sql = "SELECT id FROM users WHERE email = '$email' AND pass = '$password'";
         $pass_check = $connection -> query($sql);
         $_SESSION['user']['id'] = $pass_check;
-        $_SESSION['message'] = "Вы зарегистрированы как $name. Используйте почту или номер телефона для входа.";
+        $_SESSION['user']['message'] = "Вы зарегистрированы как $name. Используйте почту или номер телефона для входа.";
         header('Location: user_page.php');
 
     } else {
 
-        $_SESSION['message'] = 'Пароли не совпадают, проверьте введенные данные.';
+        $_SESSION['user']['message'] = 'Пароли не совпадают, проверьте введенные данные.';
         header('Location: registration_form.php');
     }

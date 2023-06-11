@@ -1,6 +1,6 @@
 <?php
     session_start();
-    if ((isset($_SESSION['user']['id']))) { // проверка на то, что юзер вошел в учетку
+    if ((!empty($_SESSION['user']['id']))) { // проверка на то, что юзер вошел в учетку
         $_SESSION['user']['message'] = 'redirected to user_page';
         header('Location: user_page.php');
     }
@@ -27,9 +27,9 @@
         <a href="registration_form.php">Зарегистрироваться</a>
         <div class="message">
             <?php
-                if (isset($_SESSION['message'])) {
-                    echo $_SESSION['message'];
-                    unset($_SESSION['message']);
+                if (empty($_SESSION['user']['message'])) {
+                    echo $_SESSION['user']['message'];
+                    unset($_SESSION['user']['message']);
                 }
             ?>
         </div>

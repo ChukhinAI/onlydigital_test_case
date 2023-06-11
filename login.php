@@ -65,6 +65,7 @@
                'email' => $user_info['email'],
                'pass' => $user_info['pass'],
            ];
+
            //dd($_SESSION['user']);
            return true;
        } else {
@@ -78,7 +79,7 @@
         header('Location: user_page.php');
         print_r('sucess');
     } else {
-        $_SESSION['message'] = 'Пара пароль-логин не найдена, проверьте введенные данные.';
+        $_SESSION['user']['message'] = 'Пара пароль-логин не найдена, проверьте введенные данные.';
         header('Location: index.php');
         print_r('<br>fail');
     }

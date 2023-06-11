@@ -1,6 +1,6 @@
 <?php
     session_start();
-    if (!isset($_SESSION['user'])) { // проверка на то, что юзер вошел в учетку
+    if (empty($_SESSION['user']['id']) || $_SESSION['user']['id'] == '') { // проверка на то, что юзер вошел в учетку
         header('Location: index.php');
     }
 ?>
@@ -44,9 +44,9 @@
     <a href="logout.php" class="btn btn-primary">Выход</a>
     <div class="message">
         <?php
-        if (isset($_SESSION['message'])) {
-            echo $_SESSION['message'];
-            unset($_SESSION['message']);
+        if (!empty($_SESSION['user']['message'])) {
+            echo $_SESSION['user']['message'];
+            unset($_SESSION['user']['message']);
         }
         ?>
     </div>
@@ -55,6 +55,7 @@
 <?php
 echo '<pre>';
 print_r($_SESSION);
+print_r($_SESSION['user']['id']);
 echo '</pre>';
 ?>
 

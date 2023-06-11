@@ -8,41 +8,49 @@
 
     global $connection;
 
-    ///*
-    if (isset($_SESSION['user'])) { // проверка на то, что юзер вошел в учетку, работает без id
+
+echo '<pre>';
+print_r($_SESSION);
+print_r($_SESSION['user']['id']);
+echo '</pre>';
+
+
+///*
+    if (!empty($_SESSION['user']['id'])) { // проверка на то, что юзер вошел в учетку, работает без id
         $id = $_SESSION['user']['id'];
     } else {
         header('Location: index.php');
     }
-        if (isset($_POST["name"])) {
-        $name = $_POST['name'];
-    } else {
+    if (empty($_POST["name"])) {
         $name = $_SESSION['user']['name'];
+    } else {
+        $name = $_POST['name'];
+
     }
-    if (isset($_POST["password"])) {
+    //if (empty($_POST["password"])) {
+    //    $password = $_SESSION['user']['password'];
+    //} else {
         $password = $_POST['password'];
-    } else {
-        $password = $_SESSION['user']['password'];
-    }
-    if (isset($_POST["password2"])) {
+    //}
+    //if (empty($_POST["password2"])) {
+    //    $password2 = $_SESSION['user']['password2'];
+    //} else {
         $password2 = $_POST['password2'];
+    //}
+    if (empty($_POST["new_password"])) {
+        $new_password = $password;
     } else {
-        $password2 = $_SESSION['user']['password2'];
+        $new_password = $_POST['password'];
     }
-    if (isset($_POST["new_password"])) {
-        $new_password = $_POST['new_password'];
-    } else {
-        $new_password = $_SESSION['user']['password'];
-    }
-    if (isset($_POST["email"])) {
-        $email = $_POST['email'];
-    } else {
+    if (empty($_POST["email"])) {
         $email = $_SESSION['user']['email'];
-    }
-    if (isset($_POST["number"])) {
-        $number = $_POST['number'];
     } else {
-        $name = $_SESSION['user']['number'];
+        $email = $_POST['email'];
+    }
+    if (empty($_POST["number"])) {
+        $number = $_SESSION['user']['number'];
+    } else {
+        $name = $_POST['number'];
     }
 
     //*/
@@ -69,20 +77,20 @@
         if ($result->num_rows > 0) {
             $sql = "SELECT email FROM users WHERE email='$email'";
             $result = $connection->query($sql);
-            $_SESSION['message'] = 'Пользователь с таким именем уже существует, попробуйте изменить имя.';
-            header('Location: user_page_editor.php');
+            $_SESSION['user']['message'] = 'Пользователь с таким именем уже существует, попробуйте изменить имя.';
+            header('Location: user_page.php');
         } else {
             $sql = "SELECT email FROM users WHERE email='$email'";
             $result = $connection->query($sql);
             if ($result->num_rows > 0) {
-                $_SESSION['message'] = 'Пользователь с таким почтовым адресом уже существует, попробуйте изменить его.';
-                header('Location: user_page_editor.php');
+                $_SESSION['user']['message'] = 'Пользователь с таким почтовым адресом уже существует, попробуйте изменить его.';
+                header('Location: user_page.php');
             } else {
                 $sql = "SELECT email FROM users WHERE number='$number'";
                 $result = $connection->query($sql);
                 if ($result->num_rows > 0) {
-                    $_SESSION['message'] = 'Пользователь с таким номером телефона уже существует, попробуйте изменить его.';
-                    header('Location: user_page_editor.php');
+                    $_SESSION['user']['message'] = 'Пользователь с таким номером телефона уже существует, попробуйте изменить его.';
+                    header('Location: user_page.php');
                 }
             }
         }
@@ -100,18 +108,19 @@
         //print_r($pas);
         mysqli_query($connection, "UPDATE users SET name='$name', email='$email', number='$number', pass='$pas' WHERE id='$id'");
 
-        $_SESSION['message'] = "Вы зарегистрированы как $name. Используйте почту или номер телефона для входа.";
+        //$_SESSION['user']['message'] = "Вы зарегистрированы как $name. Используйте почту или номер телефона для входа.";
         $_SESSION['user'] = [
+            'id' => $id,
             'name' => $name,
             'number' => $number,
             'email' => $email,
             'pas' => $pas,
+            'message' => "Вы зарегистрированы как $name. Используйте почту или номер телефона для входа.",
         ];
 
         header('Location: user_page.php');
 
     } else {
-
-        $_SESSION['message'] = 'Пароли не совпадают, проверьте введенные данные.';
-        header('Location: user_page.php');
+        $_SESSION['user']['message'] = 'Пароли не совпадают, проверьте введенные данные.';
+        //header('Location: user_page.php');
     }
