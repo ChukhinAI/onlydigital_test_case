@@ -45,7 +45,7 @@
                 $_SESSION['user']['message'] = "Пользователь с таким почтовым адресом: уже существует, попробуйте изменить его.";
                 header('Location: user_page.php');
             } else {
-                $result = db_request('email', $email, "number='$number'", $connection);
+                $result = db_request('email', $email, 'number'." = $number", $connection);
                 if ($result->num_rows > 0) {
                     $_SESSION['user']['message'] = 'Пользователь с таким номером телефона уже существует, попробуйте изменить его.';
                     header('Location: user_page.php');
