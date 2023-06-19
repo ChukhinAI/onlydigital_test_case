@@ -8,7 +8,6 @@
     $login = $_POST['login'];
     $password = md5($_POST['password']);
 
-
     function login_check($login, $connection): string {
         if (db_request('email', $login,'1', $connection) -> num_rows > 0) {
             return "email";
@@ -20,7 +19,7 @@
         }
     }
 
-    function pass_check($login, $password, $connection, $user_info): bool {
+    function pass_check($login, $password, $connection): bool {
         $login_check = login_check($login, $connection);
         $sql = "SELECT * FROM users WHERE $login_check = '$login' AND pass = '$password'";
         $pass_check = $connection -> query($sql);
@@ -44,7 +43,7 @@
     }
 
     $user_info = [];
-    if (pass_check($login, $password, $connection, $user_info)) {
+    if (pass_check($login, $password, $connection)) {
         header('Location: user_page.php');
     } else {
         $_SESSION['user']['message'] = 'Пара пароль-логин не найдена, проверьте введенные данные.';

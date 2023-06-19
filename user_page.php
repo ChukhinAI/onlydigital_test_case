@@ -41,6 +41,7 @@
             <?php
             if (!empty($_SESSION['user']['message'])) {
                 echo $_SESSION['user']['message'];
+                echo $_SESSION['alert'];
                 unset($_SESSION['user']['message']);
             }
             ?>
